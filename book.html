@@ -1,0 +1,89 @@
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Books </title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+    <script>
+        $(document).ready(() => {
+         
+            $('#bi').blur(() => {
+            
+                let input = {bookid: $('#bi').val()}
+
+                let letgetfunction= {
+                    data: input,
+                    url: 'http://localhost:450/getbook',
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (datafromserver) {
+                       
+                      
+                        if(datafromserver.status === true){
+                            $('#bi').val(datafromserver.detail.bookname);
+                            $('#pr').val(datafromserver.detail.price);
+                            $('#msg').text("books are found");
+                        }
+                        else{
+                            $('#bi').val("");
+                            $('#msg').innertext("books not found");
+                        }
+                    },
+                    error: function(errorfromserver) {
+                        console.log("some error occurred"+errorfromserver);
+                    }
+                }
+
+                $.ajax(letgetfunction);
+            });
+
+            $('#up').click(() => {
+              
+
+                let input = {bookid: $('#bi').val(), bookname: $('#bn').val()  , price: $('#pr').val() }
+                let letgetfunction = {
+                    data: input,
+                    url: 'http://localhost:450/updatebook',
+                    type: 'get',
+                    datatype: 'json',
+                    success: function (datafromserver) {
+                        console.log("Data fetched successfully");
+                        console.log(datafromserver);
+                        if(datafromserver.status === true){
+                            $('#msg').show("book are updated");
+                        }
+                        else{
+                            $('#bi').val("");
+                            $('#msg').show("book not updated");
+                        }
+                    },
+                    error: function(errorfromserver) {
+                        console.log("some error occurred"+errorfromserver);
+                    }
+                }
+
+                $.ajax(letgetfunction);
+            });
+        });
+    </script>
+</head>
+<body>
+<br>
+
+        <br>
+    <input type = "text" id ="bi" placeholder = "book id" />      <span id ="msg">Books details</span> <br>
+    <br>
+    <input type = "text" id ="bn" placeholder = "book name" /><br>
+    <br>
+    
+    <input type = "text" id ="pr" placeholder = "price" /><br>
+    <br>
+     <input type = "button" id ="up" value = "updatebook" />
+    
+    <br>
+    
+</body>
+</html>
